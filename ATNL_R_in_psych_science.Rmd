@@ -16,8 +16,8 @@ knitr::opts_chunk$set(echo = TRUE, tidy=TRUE, tidy.opts = list(width.cutoff=60))
 - `R` objects
 - Sample Size Planning
 - Exploratory Data Analysis
-- Data Processing, Documentation, and Management
 - MLM Basics
+- Data Processing, Documentation, and Management
 
 ## Who am I? 
 - Received my Ph.D. from the Department of Human Development and Quantitative Methodology at UMD
@@ -201,8 +201,6 @@ For more advanced manipulation of `factor` variables, take a look at `forcats::f
 - **DRY** code is better than **WET** code
 - `vectors`, `matrices`, `data.frames`, and `lists` are the foundation of data storage in `R`
 
-
-
 ## Sample Size Planning
 - The flexibility of SEM for power analyses - YAY!!
 - Flexibility means more thought up front - BOO!! 
@@ -237,6 +235,15 @@ fit_mlm <- glmer(y ~ 1 + x1 + x2*cat1 +
                      (1 + x1 + x2 | ID), 
                  data = data_set)
 ```
+
+## MLMs in `lme4`
+To the script files!
+
+## Summary of MLMs
+**Lots we did not cover:** 
+- Fully Bayesian approach using `Stan` and `brms` 
+- SEM extensions in `lavaan` (multigroup SEM, multilevel factor analysis, growth models)
+- Partitioning variance (see Rights and Sterba, 2018, *Psychological Methods*)
 
 ## The Power of RMarkdown
 - Generating output 

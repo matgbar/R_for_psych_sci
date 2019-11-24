@@ -16,7 +16,9 @@ pacman::p_load(tidyverse,
                psych, 
                cowplot, 
                psych, 
-               yarrr)
+               yarrr, 
+               lme4, 
+               merTools)
 
 # Exploring toy iris data 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -150,3 +152,46 @@ pirateplot(value~variable,
            main = 'Sepal and Petal Measurement Distributions')
 
 vignette('pirateplot', package = 'yarrr')
+
+# Longitudinal EDA Plots 
+# ----------------------------------------------------------------------------------------------------------------------
+data("sleepstudy")
+head(sleepstudy)
+
+g_long <- ggplot(data=sleepstudy, 
+                 aes(x=Days, y=Reaction, group=Subject, 
+                     color=Subject))+
+    geom_point(show.legend = FALSE)+
+    geom_line(show.legend = FALSE)+
+    labs(title = "Change in Mean Reaction Times across Multiple Days of Sleep Deprivation", 
+         x = "Days with 3hrs of Sleep", 
+         y = "Mean Reaction Time (ms)")
+
+g_long
+
+# Multilevel EDA Plots
+# ----------------------------------------------------------------------------------------------------------------------
+data(hsb)
+head(hsb)
+table(hsb$schid)
+
+# A very simple use case of tidyverse piping
+# Pick a random subset of IDs
+sub_schids <- sample(unique(hsb$schid), 
+                     size = 9, 
+                     replace=FALSE)
+hsb %>%
+    filter(schid %in% sub_schids) %>% 
+    ggplot(aes(x=ses, y=mathach, color=female)) + 
+    geom_point() + 
+    stat_smooth(method='lm', se=FALSE) +
+    facet_wrap(.~schid)
+
+hsb %>%
+    filter(schid %in% sub_schids) %>% 
+    ggplot(aes(x=ses, y=mathach, color=as.factor(female))) + 
+    geom_point() + 
+    stat_smooth(method='lm', se=FALSE) +
+    facet_wrap(.~schid) +
+    scale_color_discrete(name="Sex",
+                         labels=c('Male', 'Female'))
