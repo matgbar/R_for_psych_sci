@@ -50,7 +50,8 @@ hist(ranef(fit_ses_fixed)$schid[,1])
 # Influential cases
 # ----------------------------------------------------------------------------------------------------------------------
 # But what about influential cases?? 
-inf_lv2 <- influence(fit_ses_fixed, group="schid")
+inf_lv2 <- influence(fit_ses_fixed, 
+                     group="schid")
 
 n_groups <- length(unique(hsb$schid))
 cook_thresh <- 4/n_groups

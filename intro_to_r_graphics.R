@@ -135,14 +135,21 @@ pairs.panels(iris[,1:4])
 iris_stacked <- reshape::melt(iris[,1:4])
 str(iris_stacked)
 
+postscript(file = "~/Some_file.eps", 
+           height = 8, 
+           width = 10, 
+           paper = "special")
 pirateplot(value~variable, 
            data=iris_stacked, 
            ylab = 'Measurement (inches)', 
            xlab = 'Variable', 
            main = 'Sepal and Petal Measurement Distributions')
+dev.off()
 
 # But the variable names are a little annoying: 
-iris_stacked$variable <- gsub(".", " ", iris_stacked$variable, fixed = TRUE)
+iris_stacked$variable <- gsub(".", " ", 
+                              iris_stacked$variable, 
+                              fixed = TRUE)
 str(iris_stacked)
 
 pirateplot(value~variable, 
@@ -189,7 +196,8 @@ hsb %>%
 
 hsb %>%
     filter(schid %in% sub_schids) %>% 
-    ggplot(aes(x=ses, y=mathach, color=as.factor(female))) + 
+    ggplot(aes(x=ses, y=mathach, 
+               color=as.factor(female))) + 
     geom_point() + 
     stat_smooth(method='lm', se=FALSE) +
     facet_wrap(.~schid) +

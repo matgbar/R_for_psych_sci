@@ -34,7 +34,8 @@ Y~~Y
 '
 
 # Just to see what happens here: 
-demo <- simulateData(model = pop.model, sample.nobs = c(5, 10, 15))
+demo <- simulateData(model = pop.model, 
+                     sample.nobs = c(5, 10, 15))
 demo
 
 # Let's make a function: 
@@ -91,7 +92,11 @@ simPwr<-function(n.max=500, n.min=50, n.sims=1000, skew.val=0, verbose = TRUE,
     return(pow)
 }
 
-test<-simPwr(n.max=500, n.min = 25, n.sims = 100, pop.model = pop.model, test.model = test.model)
+test<-simPwr(n.max=500, 
+             n.min = 25, 
+             n.sims = 5, 
+             pop.model = pop.model, 
+             test.model = test.model)
 
 g1 <- ggplot(aes(x=N, y=Power, group = Parameter, color=Parameter), data=test) + 
     stat_smooth(se=F) +

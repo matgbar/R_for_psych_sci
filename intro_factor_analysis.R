@@ -46,7 +46,9 @@ plotnScree(nS)
 # Acceleration factor relies on finding the gradient with the most abrupt change... 
 # Parallel Analysis - eigenvalues from sample data where population correlations = 0 
 
-fit_pca <- principal(df_miss_removed, nfactors=3, rotate="oblimin")
+fit_pca <- principal(df_miss_removed, 
+                     nfactors=3, 
+                     rotate="oblimin")
 print(fit_pca, sort=TRUE)
 
 # Confirmatory Version 
@@ -58,8 +60,13 @@ textual =~ x4 + x5 + x6
 speed   =~ x7 + x8 + x9 
 '
 
-fit_cfa <- cfa(model, data=HolzingerSwineford1939, estimator='MLR')
-summary(fit_cfa, fit.measures=TRUE, rsquare=TRUE, standardized=TRUE)
+fit_cfa <- cfa(model, 
+               data=HolzingerSwineford1939, 
+               estimator='MLR')
+summary(fit_cfa, 
+        fit.measures=TRUE, 
+        rsquare=TRUE, 
+        standardized=TRUE)
 
 mod <- modificationindices(fit_cfa)
 head(mod[order(mod$mi, decreasing=TRUE),])
