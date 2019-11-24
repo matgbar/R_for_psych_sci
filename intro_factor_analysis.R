@@ -1,4 +1,4 @@
-# SmateR not HardeR Workshop
+# SmarteR not HardeR Workshop
 # R in the Psychological Science Production Cycle
 #
 # Exploratory Analyses - Dimension Reduction
@@ -20,19 +20,21 @@ pacman::p_load(tidyverse,
 # ----------------------------------------------------------------------------------------------------------------------
 #Quick Exploration 
 data("HolzingerSwineford1939")
-df <- HolzingerSwineford1939
+df <- HolzingerSwineford1939 # mostly so I don't have to keep writing HolzingerSwineford1939
 
 # Using nFactors library - NOTE THIS IS PROBLEMATIC IF THERE IS A LOT OF MISSING DATA
 df_miss_removed <- na.omit(df[,paste0("x", 1:9)])
-pairs.panels(df_miss_removed)
+pairs.panels(df_miss_removed) # snapshots
+
+# More heat mappish approach: 
 corrgram(df_miss_removed, 
          order=TRUE, 
          lower.panel = panel.conf, 
          upper.panel = panel.pie, 
          diag.panel = panel.density, 
-         col.regions = colorRampPalette(c('navy', 'lightblue', 'white', 'pink', 'darkred'))
-)
+         col.regions = colorRampPalette(c('navy', 'lightblue', 'white', 'pink', 'darkred')))
 
+# Setting up parallel analysis - NOTE: pioneered in 1964 by Horn!!
 ev <- eigen(cor(df_miss_removed)) # get eigenvalues
 ap <- parallel(subject=nrow(df_miss_removed),
                var=ncol(df_miss_removed),
@@ -43,7 +45,7 @@ plotnScree(nS)
 
 # Eigenvalues > 1 is the age-old rule for retaining a factor that is at least one "unit" of variance
 # Optimal coordinates relies on gradients in eigevalues
-# Acceleration factor relies on finding the gradient with the most abrupt change... 
+# Acceleration factor relies on finding the gradient with the most "abrupt" change... 
 # Parallel Analysis - eigenvalues from sample data where population correlations = 0 
 
 fit_pca <- principal(df_miss_removed, 

@@ -1,4 +1,4 @@
-# SmateR not HardeR Workshop
+# SmarteR not HardeR Workshop
 # R in the Psychological Science Production Cycle
 #
 # Power Analysis with Simulation
@@ -12,10 +12,7 @@ if(!require(pacman))
 
 pacman::p_load(tidyverse, 
                lavaan, 
-               simsem, 
-               simr, 
-               lme4, 
-               lmerTest)
+               simsem)
 
 # Bivariate Regression
 # ----------------------------------------------------------------------------------------------------------------------
@@ -86,15 +83,19 @@ simPwr<-function(n.max=500, n.min=50, n.sims=1000, skew.val=0, verbose = TRUE,
         colnames(dat.fin)<-c('Parameter', 'Estimate', 'Power', 'N')
         pow<-rbind(pow, dat.fin)
         time_elapsed <- round(Sys.time() - start_time, digits=3)
-        print(paste("Finished simulations for", n.obs[n], "observations;", n, 'of', length(n.obs)))
-        print(paste('Time Elapsed:', time_elapsed, 'seconds'))
+        
+        # prints if verbose flag set to true (default)
+        if(verbose){
+            print(paste("Finished simulations for", n.obs[n], "observations;", n, 'of', length(n.obs)))
+            print(paste('Time Elapsed:', time_elapsed, 'seconds'))
+        }
     }
     return(pow)
 }
 
 test<-simPwr(n.max=500, 
              n.min = 25, 
-             n.sims = 5, 
+             n.sims = 1000,
              pop.model = pop.model, 
              test.model = test.model)
 

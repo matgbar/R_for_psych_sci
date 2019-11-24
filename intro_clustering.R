@@ -1,4 +1,4 @@
-# SmateR not HardeR Workshop
+# SmarteR not HardeR Workshop
 # R in the Psychological Science Production Cycle
 #
 # Exploratory Analyses - Clustering Data
@@ -21,13 +21,17 @@ df_iris <- iris[,1:4]
 wss <- (nrow(df_iris)-1)*sum(apply(df_iris,2,var))
 for (i in 2:15) wss[i] <- sum(kmeans(df_iris,
                                      centers=i)$withinss)
+
+# Looking for the "elbow" here... Think scree plot
 plot(1:15, wss, type="b", xlab="Number of Clusters",
      ylab="Within groups sum of squares") 
 
 # So what is the right number of clusters, 2? Or Maybe 3? 
-fit_kmeans <- kmeans(df_iris, 2) # 5 cluster solution
+fit_kmeans <- kmeans(df_iris, 2) # 2 cluster solution
+
 # get cluster means
 aggregate(df_iris, by=list(fit_kmeans$cluster),FUN=mean)
+
 # append cluster assignment
 df_iris_2clust <- data.frame(df_iris, 
                              cluster = fit_kmeans$cluster) 
@@ -37,7 +41,7 @@ table(iris$Species,
 
 # So we see a two-cluster solution is distinguishing setosa from the two "v"s
 
-# Beyond the mans - latent classes with covariance AND means
+# Beyond the means (ahem, centroids) - latent classes with covariance AND mean vectors
 # ----------------------------------------------------------------------------------------------------------------------
 library(mclust)
 

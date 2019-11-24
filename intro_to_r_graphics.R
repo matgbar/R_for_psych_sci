@@ -1,4 +1,4 @@
-# SmateR not HardeR Workshop
+# SmarteR not HardeR Workshop
 # R in the Psychological Science Production Cycle
 #
 # Exploratory Graphics in R
@@ -69,6 +69,7 @@ g_uni_4c <- ggplot(data=iris,
     geom_histogram(bins=12)+
     coord_cartesian(xlim=c(0,4))
 
+# Very useful tool from cowplot package - called out specifically in code, but `cowplot::`` part not technically needed
 cowplot::plot_grid(g_uni_4a, g_uni_4b, g_uni_4c, nrow = 3)
 
 # Bi-Variate Plotting
@@ -101,7 +102,7 @@ g_bi_2 <- ggplot(data = iris,
          caption = 'Presented on November 24, 2019')
 g_bi_2
 
-# If two dimensions are good... 
+# If two dimensions are good... three are better??
 # ----------------------------------------------------------------------------------------------------------------------
 plot_ly(data = iris,
         x = ~Sepal.Width, 
@@ -135,6 +136,7 @@ pairs.panels(iris[,1:4])
 iris_stacked <- reshape::melt(iris[,1:4])
 str(iris_stacked)
 
+# To get vectorized versions of images (note other options exist: png, jpeg, pdf, etc.)
 postscript(file = "~/Some_file.eps", 
            height = 8, 
            width = 10, 
@@ -144,9 +146,9 @@ pirateplot(value~variable,
            ylab = 'Measurement (inches)', 
            xlab = 'Variable', 
            main = 'Sepal and Petal Measurement Distributions')
-dev.off()
+dev.off()   # to remove external graphics Device output and return to Rstudio (or R) default
 
-# But the variable names are a little annoying: 
+# But the variable names are a little annoying. Here is a trick:
 iris_stacked$variable <- gsub(".", " ", 
                               iris_stacked$variable, 
                               fixed = TRUE)
@@ -182,11 +184,12 @@ data(hsb)
 head(hsb)
 table(hsb$schid)
 
-# A very simple use case of tidyverse piping
+# A very simple use case of tidyverse piping - which is a separate course unto itself
 # Pick a random subset of IDs
 sub_schids <- sample(unique(hsb$schid), 
                      size = 9, 
                      replace=FALSE)
+
 hsb %>%
     filter(schid %in% sub_schids) %>% 
     ggplot(aes(x=ses, y=mathach, color=female)) + 

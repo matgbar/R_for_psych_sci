@@ -1,4 +1,4 @@
-# SmateR not HardeR Workshop
+# SmarteR not HardeR Workshop
 # R in the Psychological Science Production Cycle
 #
 # Multilevel Modeling Basics - Regression of Regressions
@@ -19,7 +19,7 @@ pacman::p_load(tidyverse,
 # ----------------------------------------------------------------------------------------------------------------------
 data("hsb")
 
-# The hypothesis we'll explore: the association between SES and math achievement
+# The RQ we'll explore: the association between SES and math achievement
 
 # Start by fitting a "null" model: 
 fit_null <- lmer(mathach ~ 1 + (1|schid), 
@@ -56,7 +56,7 @@ inf_lv2 <- influence(fit_ses_fixed,
 n_groups <- length(unique(hsb$schid))
 cook_thresh <- 4/n_groups
 
-par(mfrow=c(2,1))
+par(mfrow=c(2,1)) # basic plotting window
 # Plot DF Betas for ses fixed effects
 plot(dfbetas.estex(inf_lv2)[,2], 
      ylab = "DFBetas: SES")
@@ -68,7 +68,7 @@ plot(cooks.distance.estex(inf_lv2),
 abline(a=cook_thresh, b=0, lty='dashed', col='red')
 
 par(mfrow=c(1,1))
-# Default plots can help identify specific school IDs of interest
+# Default plots can help identify how many school IDs are outside of thresholds 
 plot(inf_lv2,
      which = "cook",
      cutoff = cook_thresh,
@@ -106,11 +106,9 @@ group.center <- function(var,grp) {
 
 group.center(hsb$ses, hsb$schid)
 
-
 hsb$c.ses <- group.center(hsb$ses, hsb$schid)
 mean(hsb$c.ses[hsb$schid=='1224'])
 mean(hsb$c.ses[hsb$schid=='2336'])
-
 # Looks like it worked
 
 fit_final <- lmer(mathach ~ 1 + c.ses + meanses + (1 + c.ses|schid), 
@@ -120,7 +118,7 @@ anova(fit_null, fit_final)
 summary(fit_final)
 confint.merMod(fit_final, parm='beta_', nsim = 1000)
 
-# From here I would work on Partitioning variance using Rights and Sterba Approach
+# From here I would work on partitioning variance using Rights and Sterba Approach
 
 # Bayesian Version: (Requires setup steps we don't have time to review)
 # ----------------------------------------------------------------------------------------------------------------------
@@ -129,4 +127,3 @@ fit_final_bayes <- brm(mathach ~ 1 + c.ses + meanses + (1 + c.ses|schid),
                        iter=2000, 
                        warmup=1000, 
                        chains=3)
-
