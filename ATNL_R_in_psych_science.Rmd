@@ -17,6 +17,7 @@ knitr::opts_chunk$set(echo = TRUE, tidy=TRUE, tidy.opts = list(width.cutoff=60))
 - Sample Size Planning
 - Exploratory Data Analysis
 - Data Processing, Documentation, and Management
+- MLM Basics
 
 ## Who am I? 
 - Received my Ph.D. from the Department of Human Development and Quantitative Methodology at UMD
@@ -226,6 +227,16 @@ To the script files!
     * k-fold cross-validation 
     * Holdout test samples
 - Utilize explore/confirm analytic approaches (but not on same sample)
+
+## MLMs in R 
+- `lme4`, `brms`, and `lavaan` can handle this models in varying ways 
+- `lme4` introduced some very very simple syntax for writing these models: 
+
+```{r, evalFALSE}
+fit_mlm <- glmer(y ~ 1 + x1 + x2*cat1 + 
+                     (1 + x1 + x2 | ID), 
+                 data = data_set)
+```
 
 ## The Power of RMarkdown
 - Generating output 
