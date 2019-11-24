@@ -230,7 +230,7 @@ To the script files!
 - `lme4`, `brms`, and `lavaan` can handle this models in varying ways 
 - `lme4` introduced some very very simple syntax for writing these models: 
 
-```{r, evalFALSE}
+```{r, eval=FALSE}
 fit_mlm <- glmer(y ~ 1 + x1 + x2*cat1 + 
                      (1 + x1 + x2 | ID), 
                  data = data_set)
