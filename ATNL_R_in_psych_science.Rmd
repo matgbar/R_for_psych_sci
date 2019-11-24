@@ -1,0 +1,244 @@
+---
+title: 'SmarteR not HardeR'
+subtitle: 'R in the Psychological Science Production Cycle'
+author: "Matthew Barstead, Ph.D."
+date: "11/24/2019"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, tidy=TRUE, tidy.opts = list(width.cutoff=60))
+```
+
+## Overview
+- Brief Overview of `R`
+- RStudio and Getting the Most from `R`
+- `R` objects
+- Sample Size Planning
+- Exploratory Data Analysis
+- Data Processing, Documentation, and Management
+
+## Who am I? 
+- Received my Ph.D. from the Department of Human Development and Quantitative Methodology at UMD
+- Primary advisor Ken Rubin - child and adolescent social and emotional development
+    * Heavy focus on observational methodologies (behavioral coding schemes)
+- Dissertation focused on the creation of an RShiny application for processing and editing heart rate data
+- Currently a data scientist/software engineer at Capital One
+    * Work on the analytics and infrastructure team for U.S. Consumer Card 
+    
+## Me and R
+- First real exposure in 2011 and mainly for power analyses to start
+- Migrated nearly all modeling over to `R` during coursework 
+    - GLMs $\checkmark$
+    - Multilevel Models $\checkmark$
+    - Structural Equation Models $\checkmark$
+    - Bayesian extensions via BUGS $\checkmark$, JAGS $\checkmark$, Stan $\checkmark$
+    - Unsupervised learning $\checkmark$
+    - Timeseries, signal processing, imputation models... you get the picture. 
+
+## Brief Overview of R 
+**History**  
+`R` is an implementation of the `S` programming language. The intent was to make a more interactive language for rapid development and deployment of statistical models. Two researchers from the University of Auckland (**R**oss Ihaka and **R**obert Gentleman), are responsible for creating the first version of `R`.  
+
+## `R` vs. `Python` 
+Both are sometimes referred to as object-oriented programming languages. Only *really* true of `Python`. 
+
+`Python`:
+```{python, cars+_py, eval=FALSE}
+cars.describe()
+```
+`R`: 
+```{r, cars_r}
+summary(cars)
+```
+
+## Getting the Most From `R`
+- [RStudio](https://rstudio.com/products/rstudio/download/) 
+- [RMarkdown](https://rstudio.com/wp-content/uploads/2015/02/rmarkdown-cheatsheet.pdf)
+- [RShiny](https://shiny.rstudio.com/images/shiny-cheatsheet.pdf)
+- [`ggplot`](https://rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)
+- [`plotly`](https://images.plot.ly/plotly-documentation/images/r_cheat_sheet.pdf)
+
+## `R` Objects
+**`character` (i.e., strings)** 
+
+```{r, char_Ex1}
+char_Ex <- "This is a string object in R"
+class(char_Ex)
+```
+
+## `R` Objects
+**`character` (i.e., strings)** 
+
+What if I wanted to get all of the words in `char_Ex` individually in a separate object?
+```{r, char_Ex2}
+strsplit(char_Ex, split=" ")
+```
+
+For more complex `character` processing examples see [this site](https://www.mjdenny.com/Text_Processing_In_R.html), which relies heavily on the `stringr` package in `R`
+
+## `R` Objects
+**`character` (i.e., strings)**
+
+The `paste()` and `paste0()` functions are among the most useful. 
+
+```{r}
+max <- 3
+for(i in 1:max){
+    # some functional code goes here:
+    msg <- paste("Simulation", i, "of", max, "completed")
+    print(msg)
+}
+```
+
+## `R` Objects
+
+Numeric objects: `intergers` and `numeric` "types" 
+
+```{r}
+int_val <- integer(1)
+paste("Object class type:", class(int_val))
+paste("Test int_val is numeric:", is.numeric(int_val))
+paste("Test int_val is integer:", is.integer(int_val))
+```
+
+## `R` Objects
+
+Numeric objects: `intergers` and `numeric` "types" 
+
+```{r}
+num_val <- numeric(1)
+paste("Object class type:", class(num_val))
+paste("Test num_val is numeric:", is.numeric(num_val))
+paste("Test num_val is integer:", is.integer(num_val))
+```
+
+## `R` Objects
+
+Numeric objects: `intergers` and `numeric` "types" 
+
+```{r}
+def_val <- 1
+paste("Object class type:", class(def_val))
+paste("Test def_val is numeric:", is.numeric(def_val))
+paste("Test def_val is integer:", is.integer(def_val))
+```
+
+
+## `R` Objects
+**`functions`**
+
+A quick diversion for code hygiene. Notice I did a lot of copying and pasting there. As a rule of thumb, it is best to write custom functions for these sorts of situations. Less code to maintain overall. 
+
+```{r, func1}
+eval_data_type <- function(x){
+    # The multiple print() statements ensure each prints in the console as program runs. 
+    x_name <- deparse(substitute(x))
+    print(paste("Object class type:", class(x)))
+    print(paste("Test", x_name, "is numeric:", is.numeric(x)))
+    print(paste("Test", x_name, "is integer:", is.integer(x)))
+}
+```
+
+## `R` Objects
+**`functions`**
+
+```{r}
+eval_data_type(int_val)
+```
+
+```{r}
+eval_data_type(def_val)
+```
+
+## `R` Objects 
+**`vectors`**
+```{r}
+vec_Ex <- c(1, 2, 3, 2, NA, 3)
+length(vec_Ex)
+mean(vec_Ex, na.rm = TRUE)
+mean(vec_Ex)
+```
+
+## `R` Objects 
+**`matrices`**
+```{r}
+matrix_Ex <- matrix(c(1,2,2,
+                      3,2,1,
+                      NA,0,19), 
+                    ncol = 3,
+                    byrow = TRUE)
+matrix_Ex
+```
+
+For quick summaries: `colMeans()`, `colSums()`, `rowMeans()`, & `rowSums()`. Combine with logical tests to get quick useful information. For instance what happens when you try running: `colSums(is.na(matrix_Ex))`?
+
+## `R` Objects
+
+`data.frames` (and `lists`)
+
+`data.frames` are essentially specially constructed `lists`. 
+
+```{r}
+df <- data.frame(var_name1 = sample(1:5, size=20, replace = TRUE),
+                 var_name2 = rnorm(20, mean=50, sd=10))
+dim(df)
+head(df,3)
+```
+
+## `R` Objects
+**`factors`** 
+
+Both super useful and super annoying. Store values as integers with character labels referred to as `levels`. Certain functions will not accept `character` variables. Some accept `character` or `factor` variables (but may cast `character` variables into `factor` variables).
+
+For more advanced manipulation of `factor` variables, take a look at `forcats::fct_relevel()` and the built-in. `levels()`
+
+## Quick Review of Concepts
+- `R` is more accurately described as a pseudo-object-oriented programming language
+- Combine with RStudio, RMarkdown, & RShiny to get the most out of `R`
+- `character`, `numeric`, `integer`, and `factor` variables each have different properties
+- **DRY** code is better than **WET** code
+- `vectors`, `matrices`, `data.frames`, and `lists` are the foundation of data storage in `R`
+
+
+
+## Sample Size Planning
+- The flexibility of SEM for power analyses - YAY!!
+- Flexibility means more thought up front - BOO!! 
+- *Not* a course on structural equation models 
+    * Modeling the covariance matrix (and sometimes the mean vector)
+    * Specify a series of structural paths hypothesized to account for the covariance matrix
+    * Workflow using a simple regression model with path tracing 
+
+## Summary of Sample Size Planning
+- Simulations are often the most flexible, but most time-intensive to setup
+- Goal is to provide a defensible analysis at determining sample size 
+- When using existing tools be aware that many make default choices that may or may not align with your use-case
+- For multilevel power analyses, both the `lavaan` + `simsem` and `simr` approaches would work
+
+## Exploratory Data Analysis
+To the script files!
+
+## Summary of EDA 
+- Dimensions vs. clusters
+- Interpretation will change depending on the inputs 
+- Consider possibility of holdout approaches whenever possible 
+    * k-fold cross-validation 
+    * Holdout test samples
+- Utilize explore/confirm analytic approaches (but not on same sample)
+
+## The Power of RMarkdown
+- Generating output 
+- Write your manuscript from start to finish (`papaja`) and combine with GH for version control
+- Generate comprehensive and reproducible documentation 
+- Create entire websites (`blogdown`) or online publications/manuals (`bookdown`)
+
+## GitHub, R, and the ZenHub Board 
+- An imperfect example, but imagine for a collaborative writing project
+
+## Tips
+- Documentation is usually good, but fully understanding it can take some getting used to. 
+- `?function`, `vignette()`
+- Someone has usually already solved the problem you are trying to solve
+- Checkout RStudio cheatsheets, anything written by Hadley Wickham or Yihui Xie for ways to get the most out of `R`
+- [The RGraph Gallery](https://www.r-graph-gallery.com/) has lots of inspiring visualizations
