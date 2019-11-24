@@ -1,7 +1,7 @@
 # SmateR not HardeR Workshop
 # R in the Psychological Science Production Cycle
 #
-# Exploratory Data Analysis 1 of X 
+# Exploratory Graphics in R
 #
 # Questions? contact mbarstead@deadreckoning.consulting
 
